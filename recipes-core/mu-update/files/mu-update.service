@@ -1,0 +1,11 @@
+[Unit]
+Description=mu-update: applies image update
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/libexec/mu-update/mu-update.sh
+StandardOutput=journal
+StandardError=journal
+Restart=no
+TimeoutStartSec=300

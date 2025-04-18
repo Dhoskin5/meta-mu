@@ -1,0 +1,12 @@
+[Unit]
+Description=mu-init update checker
+After=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/libexec/mu-init/mu-init.sh
+User=root
+
+[Install]
+WantedBy=multi-user.target
