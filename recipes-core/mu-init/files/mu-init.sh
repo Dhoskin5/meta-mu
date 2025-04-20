@@ -1,12 +1,14 @@
 #!/bin/sh
-echo "mu-init: Check for Updates Started" | systemd-cat -t mu-init
 
-if ls /data/image/image-* 1>/dev/null 2>&1; then
-    echo "mu-init: Local Update File Found" | systemd-cat -t mu-init
-    systemctl start mu-update.service
+TAG="mu-init"
+UPDATE_INBOX_DIR="${UPDATE_INBOX_DIR:-/data/update-inbox}"
+MANIFEST_FILE="$UPDATE_INBOX_DIR/manifest.json"
+
+echo "mu-init: Checking for manifest in $UPDATE_INBOX_DIR" | systemd-cat -t $TAG
+
+if [ -f "$MANIFEST_FILE" ]; then
+    echo "mu-init: Found manifest, triggering mu-verify" | systemd-cat -t $TAG
+    /usr/libexec/mu-verify/mu-verify.sh" $MANIFEST_FILE"
 else
-    echo "mu-init: No Local Update File Found" | systemd-cat -t mu-init
-    echo "mu-init: TESTING- STARTING mu-update.service" | systemd-cat -t mu-init
-    systemctl start mu-update.service
-    echo "mu-init: TESTING- STARTED mu-update.service" | systemd-cat -t mu-init
+    echo "mu-init: No manifest found, exiting." | systemd-cat -t $TAG
 fi

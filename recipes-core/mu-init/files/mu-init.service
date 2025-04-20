@@ -1,12 +1,13 @@
 [Unit]
 Description=mu-init update checker
-After=network.target
 
 [Service]
 Type=oneshot
-RemainAfterExit=yes
+Environment=UPDATE_INBOX_DIR=/data/update-inbox
 ExecStart=/usr/libexec/mu-init/mu-init.sh
 User=root
+StandardOutput=journal+console
+StandardError=journal+console
 
 [Install]
 WantedBy=multi-user.target
