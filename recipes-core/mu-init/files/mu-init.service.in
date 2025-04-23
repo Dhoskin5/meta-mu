@@ -3,7 +3,7 @@ Description=mu-init update checker
 
 [Service]
 Type=oneshot
-Environment=UPDATE_INBOX_DIR=/data/update-inbox
+Environment=UPDATE_INBOX_DIR=@MU_UPDATE_INBOX_DIR@
 ExecStart=/usr/libexec/mu-init/mu-init.sh
 User=root
 StandardOutput=journal+console

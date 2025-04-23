@@ -1,14 +1,24 @@
 #!/bin/sh
 
 TAG="mu-init"
-UPDATE_INBOX_DIR="${UPDATE_INBOX_DIR:-/data/update-inbox}"
+
+log() {
+    echo "$TAG: $*" | systemd-cat -t "$TAG"
+}
+
+if [ -z "$UPDATE_INBOX_DIR" ]; then
+    log "ERROR - UPDATE_INBOX_DIR is not set!"
+    exit 1
+fi
+
 MANIFEST_FILE="$UPDATE_INBOX_DIR/manifest.json"
 
-echo "mu-init: Checking for manifest in $UPDATE_INBOX_DIR" | systemd-cat -t $TAG
+log "Checking for manifest in $UPDATE_INBOX_DIR"
 
 if [ -f "$MANIFEST_FILE" ]; then
-    echo "mu-init: Found manifest, triggering mu-verify" | systemd-cat -t $TAG
+    log "Found manifest, triggering mu-verify"
     exec /usr/libexec/mu-verify/mu-verify.sh "$MANIFEST_FILE"
 else
-    echo "mu-init: No manifest found, exiting." | systemd-cat -t $TAG
+    log "No manifest found, exiting."
+    exit 0
 fi

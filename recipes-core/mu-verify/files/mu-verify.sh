@@ -4,7 +4,6 @@ TAG="mu-verify"
 MANIFEST="$1"
 SIGNATURE="${MANIFEST}.sig"
 PUBLIC_KEY_DIR="/etc/mu-verify/trusted.d"
-UPDATE_DIR="$(dirname "$MANIFEST")"
 
 log() {
     echo "$TAG: $*" | systemd-cat -t "$TAG"
@@ -14,6 +13,12 @@ if [ ! -f "$MANIFEST" ] || [ ! -f "$SIGNATURE" ]; then
     log "Missing manifest or signature"
     exit 1
 fi
+
+if ! ls "$PUBLIC_KEY_DIR"/*.pub >/dev/null 2>&1; then
+    log "No public keys found in $PUBLIC_KEY_DIR"
+    exit 5
+fi
+
 
 # Step 1: Signature Verification
 log "Verifying manifest signature..."
@@ -36,11 +41,12 @@ fi
 log "Parsing manifest and validating payloads..."
 
 jq -r '.files[] | "\(.name) \(.sha256)"' "$MANIFEST" | while read -r FILE EXPECTED_HASH; do
-    FILE_PATH="$UPDATE_DIR/$FILE"
+    FILE_PATH="$UPDATE_INBOX_DIR/$FILE"
 
     if [ ! -f "$FILE_PATH" ]; then
         log "Missing payload $FILE_PATH"
-        exit 3
+        status=3
+        break
     fi
 
     ACTUAL_HASH=$(sha256sum "$FILE_PATH" | awk '{print $1}')
@@ -49,11 +55,16 @@ jq -r '.files[] | "\(.name) \(.sha256)"' "$MANIFEST" | while read -r FILE EXPECT
         log "SHA256 mismatch for $FILE"
         log "Expected: $EXPECTED_HASH"
         log "Actual:   $ACTUAL_HASH"
-        exit 4
+        status=4
+        break
     else
         log "Verified $FILE"
     fi
 done
+
+if [ $status -ne 0 ]; then
+    exit $status
+fi
 
 log "All payloads verified successfully"
 exit 0

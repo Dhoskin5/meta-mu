@@ -4,6 +4,7 @@ Description=mu-update: applies image update
 [Service]
 Type=oneshot
 RemainAfterExit=yes
+Environment=UPDATE_INBOX_DIR=@MU_UPDATE_INBOX_DIR@
 ExecStart=/usr/libexec/mu-update/mu-update.sh
 StandardOutput=journal+console
 StandardError=journal+console
