@@ -1,0 +1,15 @@
+[Unit]
+Description=mu-update-daemon: applies verified image updates
+After=network.target dbus.service
+
+[Service]
+Type=simple
+Environment=UPDATE_INBOX_DIR=@MU_UPDATE_INBOX_DIR@
+ExecStart=/usr/libexec/mu-update-daemon/mu-update-daemon
+StandardOutput=journal+console
+StandardError=journal+console
+Restart=on-failure
+TimeoutStartSec=300
+
+[Install]
+WantedBy=multi-user.target
