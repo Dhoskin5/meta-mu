@@ -12,9 +12,9 @@ SRC_URI = "file://key-1.pub \
 
 S = "${WORKDIR}"
 
-FILES:${PN} += "/etc/mu-verify/trusted.d/"
+FILES:${PN} += "/etc/mu/trusted.d/"
 
 do_install() {
-    install -d ${D}/etc/mu-verify/trusted.d
-    install -m 0644 ${WORKDIR}/*.pub ${D}/etc/mu-verify/trusted.d/
+    install -d ${D}/etc/mu/trusted.d
+    install -m 0644 ${WORKDIR}/*.pub ${D}/etc/mu/trusted.d/
 }

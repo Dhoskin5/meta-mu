@@ -15,6 +15,6 @@ inherit cmake pkgconfig
 
 RDEPENDS:${PN} += "libsodium"
 
+FILES:${PN} += "${bindir}/minisign"
+
 INSANE_SKIP:${PN} = "already-stripped"
-
-

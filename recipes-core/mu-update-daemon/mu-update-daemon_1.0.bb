@@ -7,11 +7,11 @@ SRC_URI = "git://github.com/Dhoskin5/mu-update-daemon.git;branch=master;protocol
            file://mu-update-daemon.service.in \
            file://org.mu.Update.conf \
 "
-SRCREV = "a59a42f0db2fe432a4a52cb8034de6affa5cbbeb"
+SRCREV = "798c3df272204d4fb25a0470a23abd6dcb97375d"
 
 inherit cmake systemd python3native
-DEPENDS = "glib-2.0 pkgconfig-native glib-2.0-native python3-packaging-native python3-native"
-RDEPENDS:${PN} += "dbus"
+DEPENDS = "glib-2.0 pkgconfig-native glib-2.0-native python3-packaging-native python3-native systemd"
+RDEPENDS:${PN} += "dbus minisign mu-init libsystemd"
 
 S = "${WORKDIR}/git"
 

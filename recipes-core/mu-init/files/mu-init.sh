@@ -28,6 +28,7 @@ RESULT=$(gdbus call \
     --dest org.mu.Update \
     --object-path /org/mu/Update \
     --method org.mu.Update.TriggerUpdate \
+    "$UPDATE_INBOX_DIR" \
     2>&1)
 
 if echo "$RESULT" | grep -q '(true,'; then

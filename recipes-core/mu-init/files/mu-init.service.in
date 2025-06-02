@@ -1,5 +1,7 @@
 [Unit]
 Description=mu-init update checker
+After=mu-update-daemon.service
+Requires=mu-update-daemon.service
 
 [Service]
 Type=oneshot
